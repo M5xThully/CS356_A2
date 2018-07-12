@@ -26,7 +26,7 @@ public class UIWindow extends JFrame implements UIPanel {
   private JPanel panel3;
   private JTree tree;
   private TreeDataHandler treeDataHandler;
-  private AlertBox popUp = new AlertBox();
+  private Alert popUp = new Alert();
 
   private UIWindow() {
     setTitle("Mini Twitter UI");
@@ -155,7 +155,7 @@ public class UIWindow extends JFrame implements UIPanel {
   public void openUserView(User user) {
     User node = getSelectedNode(this.tree);
     if (!(node instanceof SingleUser)) {
-      popUp.infoBox("No user view for groups.", "[Error]");
+      popUp.alert("No user view for groups.", "[Error]");
     } else {
       new SingleUserWindow((SingleUser) node, treeDataHandler);
     }
@@ -175,7 +175,7 @@ public class UIWindow extends JFrame implements UIPanel {
           return;
         }
         if(!newUser.validateID(userId)) {
-          popUp.infoBox("ID contains invalid characters.", "[Error]");
+          popUp.alert("ID contains invalid characters.", "[Error]");
           return;
         }
         if (treeDataHandler.addNode(selectedNode, newUser)) {
@@ -193,7 +193,7 @@ public class UIWindow extends JFrame implements UIPanel {
           return;
         }
         if (!newUserGroup.validateID(groupId)) {
-          popUp.infoBox("ID contains invalid characters.", "[Error]");
+          popUp.alert("ID contains invalid characters.", "[Error]");
           return;
         }
         if (treeDataHandler.addNode(selectedNode, newUserGroup)) {
@@ -211,22 +211,22 @@ public class UIWindow extends JFrame implements UIPanel {
         if (e.getSource() == TotalUsersButton) {
           TotalUsers totalUsers = new TotalUsers();
           treeDataHandler.accept(totalUsers);
-          popUp.infoBox("There are " + totalUsers.result() + " users.", "Total Users");
+          popUp.alert("There are " + totalUsers.result() + " users.", "Total Users");
         }
         if (e.getSource() == TotalGroupsButton) {
           TotalGroups totalGroups = new TotalGroups();
           treeDataHandler.accept(totalGroups);
-          popUp.infoBox("There are " + totalGroups.result() + " groups.", "Total Groups");
+          popUp.alert("There are " + totalGroups.result() + " groups.", "Total Groups");
         }
         if (e.getSource() == TotalMessagesButton) {
           TotalTweets totalMessages = new TotalTweets();
           treeDataHandler.accept(totalMessages);
-          popUp.infoBox("There are " + totalMessages.result() + " messages.", "Total Messages");
+          popUp.alert("There are " + totalMessages.result() + " messages.", "Total Messages");
         }
         if (e.getSource() == PositiveWordsButton) {
           PositiveWords positivePercentage = new PositiveWords("nice good great amazing awesome daebak lit");
           treeDataHandler.accept(positivePercentage);
-          popUp.infoBox(String.format("%.02f", positivePercentage.result()) + "% of messages that are positive.",
+          popUp.alert(String.format("%.02f", positivePercentage.result()) + "% of messages that are positive.",
               "Positive Percentage of Messages");
         }
       }

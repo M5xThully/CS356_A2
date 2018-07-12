@@ -5,7 +5,7 @@ public class TreeDataHandler implements Visitable, TreeDataStructure {
 
   private DefaultTreeModel tree;
   private Map<String,User> map;
-  private AlertBox popUp = new AlertBox();
+  private Alert popUp = new Alert();
 
   public TreeDataHandler(Map<String, User> map) {
     long creationTime = System.currentTimeMillis();
@@ -18,11 +18,11 @@ public class TreeDataHandler implements Visitable, TreeDataStructure {
   @Override
   public boolean addNode(User parentNode, User child) {
     if(contains(child.getID())) {
-      popUp.infoBox("Node already exists in tree.", "[Error]");
+      popUp.alert("Node already exists in tree.", "[Error]");
       return false;
     }
     if(!parentNode.getAllowsChildren()) {
-      popUp.infoBox("Leaf nodes can't have children.", "[Error]");
+      popUp.alert("Leaf nodes can't have children.", "[Error]");
       return false;
     }
     map.put(child.getID(), child);

@@ -9,7 +9,7 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
 
   private SingleUser currentViewedUser;
   private TreeDataHandler treeDataHandler;
-  private AlertBox popUpBox = new AlertBox();
+  private Alert popUpBox = new Alert();
 
   private JTextArea textUserId;
   private JTextArea textTweetMessage;
@@ -95,11 +95,11 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
 
   private boolean errorFollowingUser(User node) {
     if(alreadyFollowingUser(node)) {
-      popUpBox.infoBox("You are already following this user.", "[Error]");
+      popUpBox.alert("You are already following this user.", "[Error]");
       return true;
     }
     if(followingSelf(node)) {
-      popUpBox.infoBox("You can't follow yourself.", "[Error]");
+      popUpBox.alert("You can't follow yourself.", "[Error]");
       return true;
     }
     return false;
@@ -124,7 +124,7 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
   @Override
   public void follow(SingleUser user) {
     currentViewedUser.follow(user);
-    popUpBox.infoBox("You are now following " + user.getID() + ".", "[User Found]");
+    popUpBox.alert("You are now following " + user.getID() + ".", "[User Found]");
   }
 
   @Override
@@ -143,13 +143,13 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
         if (treeDataHandler.getUser(userId) != null) {
           node = treeDataHandler.getUser(userId);
         } else {
-          popUpBox.infoBox("User not found.", "[Error]");
+          popUpBox.alert("User not found.", "[Error]");
           return;
         }
         if (errorFollowingUser(node)) {
           return;
         } else if (!(node instanceof SingleUser)) {
-          popUpBox.infoBox("Only Single Users can be followed.", "[Error]");
+          popUpBox.alert("Only Single Users can be followed.", "[Error]");
         } else {
           follow((SingleUser) node);
         }
