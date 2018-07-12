@@ -16,7 +16,7 @@ public class UIWindow extends JFrame implements UIPanel {
   private JButton addGroupButton;
   private JButton openUserViewButton;
   private JButton TotalUsersButton;
-  private JButton TotalMessagesButton;
+  private JButton TotalTweetsButton;
   private JButton TotalGroupsButton;
   private JButton PositiveWordsButton;
   private JTextArea txtrUserId;
@@ -59,36 +59,43 @@ public class UIWindow extends JFrame implements UIPanel {
     addUserButton.addActionListener(handle);
     addUserButton.setBounds(450, 28, 120, 63);
     contentPane.add(addUserButton);
+    addUserButton.setForeground(Color.BLACK);
 
     addGroupButton = new JButton("Add Group");
     addGroupButton.addActionListener(handle);
     addGroupButton.setBounds(450, 108, 120, 63);
     contentPane.add(addGroupButton);
+    addGroupButton.setForeground(Color.BLACK);
 
     openUserViewButton = new JButton("Open User View");
     openUserViewButton.addActionListener(handle);
     openUserViewButton.setBounds(262, 190, 310, 40);
     contentPane.add(openUserViewButton);
+    openUserViewButton.setForeground(Color.BLACK);
 
     TotalUsersButton = new JButton("Total Users");
     TotalUsersButton.addActionListener(handle);
     TotalUsersButton.setBounds(265, 320, 140, 40);
     contentPane.add(TotalUsersButton);
+    TotalUsersButton.setForeground(Color.BLACK);
     
     PositiveWordsButton = new JButton("Positive   %");
     PositiveWordsButton.addActionListener(handle);
     PositiveWordsButton.setBounds(432, 320, 140, 40);
     contentPane.add(PositiveWordsButton);
+    PositiveWordsButton.setForeground(Color.BLACK);
 
-    TotalMessagesButton = new JButton("Total Tweets");
-    TotalMessagesButton.addActionListener(handle);
-    TotalMessagesButton.setBounds(265, 381, 140, 40);
-    contentPane.add(TotalMessagesButton);
+    TotalTweetsButton = new JButton("Total Tweets");
+    TotalTweetsButton.addActionListener(handle);
+    TotalTweetsButton.setBounds(265, 381, 140, 40);
+    contentPane.add(TotalTweetsButton);
+    TotalTweetsButton.setForeground(Color.BLACK);
 
     TotalGroupsButton = new JButton("Total Groups");
     TotalGroupsButton.addActionListener(handle);
     TotalGroupsButton.setBounds(432, 381, 140, 40);
     contentPane.add(TotalGroupsButton);
+    TotalGroupsButton.setForeground(Color.BLACK);
 
     panel3 = new JPanel();
     panel3.setBorder(new TitledBorder(UIManager.getBorder("List.focusCellHighlightBorder"), "User ID", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 225, 0)));
@@ -218,7 +225,7 @@ public class UIWindow extends JFrame implements UIPanel {
           treeDataHandler.accept(totalGroups);
           popUp.alert("There are " + totalGroups.result() + " groups.", "Total Groups");
         }
-        if (e.getSource() == TotalMessagesButton) {
+        if (e.getSource() == TotalTweetsButton) {
           TotalTweets totalMessages = new TotalTweets();
           treeDataHandler.accept(totalMessages);
           popUp.alert("There are " + totalMessages.result() + " messages.", "Total Messages");
