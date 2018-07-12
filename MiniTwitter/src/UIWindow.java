@@ -16,19 +16,18 @@ public class UIWindow extends JFrame implements UIPanel {
   private JButton addUserButton;
   private JButton addGroupButton;
   private JButton openUserViewButton;
-  private JButton showTotalUsersButton;
-  private JButton showTotalMessagesButton;
-  private JButton showTotalGroupsButton;
-  private JButton showPositiveWordsButton;
-  private JButton lastUpdatedUserButton;
+  private JButton TotalUsersButton;
+  private JButton TotalMessagesButton;
+  private JButton TotalGroupsButton;
+  private JButton PositiveWordsButton;
   private JTextArea txtrUserId;
   private JTextArea txtrUserGroupId;
-  private JTree tree;
-  private TreeDataHandler treeDataHandler;
-  private AlertBox popUp = new AlertBox();
   private JPanel panel1;
   private JPanel panel2;
   private JPanel panel3;
+  private JTree tree;
+  private TreeDataHandler treeDataHandler;
+  private AlertBox popUp = new AlertBox();
 
   private UIWindow() {
     setTitle("Mini Twitter UI");
@@ -74,25 +73,25 @@ public class UIWindow extends JFrame implements UIPanel {
     openUserViewButton.setBounds(262, 190, 310, 40);
     contentPane.add(openUserViewButton);
 
-    showTotalUsersButton = new JButton("User Total");
-    showTotalUsersButton.addActionListener(handler);
-    showTotalUsersButton.setBounds(265, 320, 140, 40);
-    contentPane.add(showTotalUsersButton);
+    TotalUsersButton = new JButton("User Total");
+    TotalUsersButton.addActionListener(handler);
+    TotalUsersButton.setBounds(265, 320, 140, 40);
+    contentPane.add(TotalUsersButton);
     
-    showPositiveWordsButton = new JButton("Positive   %");
-    showPositiveWordsButton.addActionListener(handler);
-    showPositiveWordsButton.setBounds(432, 320, 140, 40);
-    contentPane.add(showPositiveWordsButton);
+    PositiveWordsButton = new JButton("Positive   %");
+    PositiveWordsButton.addActionListener(handler);
+    PositiveWordsButton.setBounds(432, 320, 140, 40);
+    contentPane.add(PositiveWordsButton);
 
-    showTotalMessagesButton = new JButton("Messages Total");
-    showTotalMessagesButton.addActionListener(handler);
-    showTotalMessagesButton.setBounds(265, 381, 140, 40);
-    contentPane.add(showTotalMessagesButton);
+    TotalMessagesButton = new JButton("Messages Total");
+    TotalMessagesButton.addActionListener(handler);
+    TotalMessagesButton.setBounds(265, 381, 140, 40);
+    contentPane.add(TotalMessagesButton);
 
-    showTotalGroupsButton = new JButton("Group Total");
-    showTotalGroupsButton.addActionListener(handler);
-    showTotalGroupsButton.setBounds(432, 381, 140, 40);
-    contentPane.add(showTotalGroupsButton);
+    TotalGroupsButton = new JButton("Group Total");
+    TotalGroupsButton.addActionListener(handler);
+    TotalGroupsButton.setBounds(432, 381, 140, 40);
+    contentPane.add(TotalGroupsButton);
 
     panel3 = new JPanel();
     panel3.setBorder(new TitledBorder(UIManager.getBorder("List.focusCellHighlightBorder"), "User ID", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 225, 0)));
@@ -214,26 +213,26 @@ public class UIWindow extends JFrame implements UIPanel {
         if(selectedNode instanceof SingleUser) {
         }
       } else {
-        if (e.getSource() == showTotalUsersButton) {
+        if (e.getSource() == TotalUsersButton) {
           TotalUsers totalUsers = new TotalUsers();
           treeDataHandler.accept(totalUsers);
           popUp.infoBox("There are " + totalUsers.result() + " users.", "Total Users");
         }
-        if (e.getSource() == showTotalGroupsButton) {
+        if (e.getSource() == TotalGroupsButton) {
           TotalGroups totalGroups = new TotalGroups();
           treeDataHandler.accept(totalGroups);
           popUp.infoBox("There are " + totalGroups.result() + " groups.", "Total Groups");
 
         }
-        if (e.getSource() == showTotalMessagesButton) {
+        if (e.getSource() == TotalMessagesButton) {
           TotalMessages totalMessages = new TotalMessages();
           treeDataHandler.accept(totalMessages);
           popUp.infoBox("There are " + totalMessages.result() + " messages.", "Total Messages");
         }
-        if (e.getSource() == showPositiveWordsButton) {
+        if (e.getSource() == PositiveWordsButton) {
           PositiveWords positivePercentage = new PositiveWords("good nice awesome great amazing");
           treeDataHandler.accept(positivePercentage);
-          popUp.infoBox(String.format("%.02f", positivePercentage.result()) + "% of messages are positive.",
+          popUp.infoBox(String.format("%.02f", positivePercentage.result()) + "% of messages that are positive.",
               "Positive Percentage of Messages");
         }
       }

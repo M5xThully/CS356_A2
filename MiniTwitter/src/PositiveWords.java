@@ -23,10 +23,13 @@ public class PositiveWords implements Visitor {
       Object[] array = ((SingleUser) node).getMessages();
       String[] messages = Arrays.copyOf(array, array.length, String[].class);
       messageCount += messages.length;
-      for(String currentKeyWord: positiveWords)
-        for(String currentMessage:messages)
-          if(currentMessage.toLowerCase().contains(currentKeyWord))
+      for(String currentKeyWord: positiveWords) {
+        for(String currentMessage:messages) {
+          if(currentMessage.toLowerCase().contains(currentKeyWord)) {
             positiveMessages++;
+          }
+        }
+      }
     }
   }
 
