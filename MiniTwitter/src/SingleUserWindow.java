@@ -9,7 +9,7 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
 
   private SingleUser currentViewedUser;
   private TreeDataHandler treeDataHandler;
-  private AlertBox popUp = new AlertBox();
+  private AlertBox popUpBox = new AlertBox();
 
   private JTextArea textUserId;
   private JTextArea textTweetMessage;
@@ -27,9 +27,9 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
   private JPanel border4;
 
   public SingleUserWindow(SingleUser individualUser, TreeDataHandler treeDataHandler) {
-    this.currentViewedUser=individualUser;
-    this.treeDataHandler=treeDataHandler;
-    this.modelFollowing=currentViewedUser.getFollowingListModel();
+    this.currentViewedUser = individualUser;
+    this.treeDataHandler = treeDataHandler;
+    this.modelFollowing = currentViewedUser.getFollowingList();
 
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     setTitle(currentViewedUser.getID() + "'s " + "User View");
@@ -54,7 +54,7 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
     border2.setBounds(0, 235, 459, 154);
     contentPane.add(border2);
     border2.setLayout(null);
-    newsFeedList = new JList<>(currentViewedUser.getNewsFeedListModel());
+    newsFeedList = new JList<>(currentViewedUser.getNewsFeed());
     JScrollPane scrollPane_1 = new JScrollPane(newsFeedList);
     scrollPane_1.setBounds(10, 21, 443, 126);
     border2.add(scrollPane_1);
@@ -69,28 +69,25 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
     textTweetMessage.setBounds(6, 16, 274, 32);
     border3.add(textTweetMessage);
 
-
     border4 = new JPanel();
     border4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "User ID", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
     border4.setBounds(0, 0, 290, 58);
     contentPane.add(border4);
     border4.setLayout(null);
 
-
     textUserId = new JTextArea();
     textUserId.setBounds(6, 16, 274, 32);
     border4.add(textUserId);
 
-    Handler handler = new Handler();
-
     tweetButton = new JButton("Post Tweet");
     tweetButton.setBounds(322, 193, 125, 35);
-    tweetButton.addActionListener(handler);
+    Handler handle = new Handler();
+    tweetButton.addActionListener(handle);
     getContentPane().add(tweetButton);
 
     followButton = new JButton("Follow User");
     followButton.setBounds(322, 12, 125, 35);
-    followButton.addActionListener(handler);
+    followButton.addActionListener(handle);
     getContentPane().add(followButton);
 
     setVisible(true);
@@ -98,11 +95,11 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
 
   private boolean errorFollowingUser(User node) {
     if(alreadyFollowingUser(node)) {
-      popUp.infoBox("You are already following this user.", "ERROR");
+      popUpBox.infoBox("You are already following this user.", "[Error]");
       return true;
     }
     if(followingSelf(node)) {
-      popUp.infoBox("You cannot follow yourself.", "ERROR");
+      popUpBox.infoBox("You can't follow yourself.", "[Error]");
       return true;
     }
     return false;
@@ -127,12 +124,12 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
   @Override
   public void follow(SingleUser user) {
     currentViewedUser.follow(user);
-    popUp.infoBox("You are now following " + user.getID() + ".", "[User Found]");
+    popUpBox.infoBox("You are now following " + user.getID() + ".", "[User Found]");
   }
 
   @Override
-  public void tweet(String message) {
-    currentViewedUser.tweet(message);
+  public void tweet(String tweet) {
+    currentViewedUser.tweet(tweet);
   }
 
   private class Handler implements ActionListener {
@@ -146,13 +143,13 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
         if (treeDataHandler.getUser(userId) != null) {
           node = treeDataHandler.getUser(userId);
         } else {
-          popUp.infoBox("User not found.", "ERROR");
+          popUpBox.infoBox("User not found.", "[Error]");
           return;
         }
         if (errorFollowingUser(node)) {
           return;
         } else if (!(node instanceof SingleUser)) {
-          popUp.infoBox("Only Single Users can be followed.", "ERROR");
+          popUpBox.infoBox("Only Single Users can be followed.", "[Error]");
         } else {
           follow((SingleUser) node);
         }

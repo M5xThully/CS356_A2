@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class PositiveWords implements Visitor {
 
   private int positiveMessages = 0;
-  private int messageCount = 0;
+  private int tweetCount = 0;
   private String[] positiveWords;
 
   public PositiveWords(String positiveWords) {
@@ -20,12 +20,13 @@ public class PositiveWords implements Visitor {
   @Override
   public void visit(User node) {
     if(node instanceof SingleUser){
-      Object[] array = ((SingleUser) node).getMessages();
-      String[] messages = Arrays.copyOf(array, array.length, String[].class);
-      messageCount += messages.length;
+      Object[] array = ((SingleUser) node).getTweets();
+      String[] tweets = Arrays.copyOf(array, array.length, String[].class);
+      tweetCount += tweets.length;
+      
       for(String currentKeyWord: positiveWords) {
-        for(String currentMessage:messages) {
-          if(currentMessage.toLowerCase().contains(currentKeyWord)) {
+        for(String currentTweet:tweets) {
+          if(currentTweet.toLowerCase().contains(currentKeyWord)) {
             positiveMessages++;
           }
         }
@@ -34,6 +35,6 @@ public class PositiveWords implements Visitor {
   }
 
   public double result() {
-    return (positiveMessages * 100.0 / messageCount);
+    return (positiveMessages * 100.0 / tweetCount);
   }
 }

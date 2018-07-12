@@ -6,5 +6,5 @@ public interface SinglePanel {
 
   void follow(SingleUser user);
 
-  void tweet(String message);
+  void tweet(String tweet);
 }

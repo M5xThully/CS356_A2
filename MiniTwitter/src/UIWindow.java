@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class UIWindow extends JFrame implements UIPanel {
@@ -38,13 +37,12 @@ public class UIWindow extends JFrame implements UIPanel {
     setContentPane(contentPane);
     contentPane.setLayout(null);
 
-    treeDataHandler = new TreeDataHandler(new HashMap<>());
-
     panel1 = new JPanel();
     panel1.setBorder(new TitledBorder(UIManager.getBorder("List.focusCellHighlightBorder"), "Tree View", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 225, 0)));
     panel1.setBounds(0, 11, 251, 426);
     contentPane.add(panel1);
     panel1.setLayout(null);
+    treeDataHandler = new TreeDataHandler(new HashMap<>());
     tree = new JTree(treeDataHandler.getModel());
     tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     tree.setBounds(0, 0, 235, 400);
@@ -53,43 +51,42 @@ public class UIWindow extends JFrame implements UIPanel {
     panel1.add(scrollPane);
 
     Icon leafIcon = UIManager.getIcon("FileView.fileIcon");
-    Icon nonLeafIcon = UIManager.getIcon("FileView.directoryIcon");
-    tree.setCellRenderer(new CellRender(leafIcon, nonLeafIcon));
-
-    Handler handler = new Handler();
+    Icon notLeafIcon = UIManager.getIcon("FileView.directoryIcon");
+    tree.setCellRenderer(new CellRender(leafIcon, notLeafIcon));
 
     addUserButton = new JButton("Add User");
-    addUserButton.addActionListener(handler);
+    Handler handle = new Handler();
+    addUserButton.addActionListener(handle);
     addUserButton.setBounds(450, 28, 120, 63);
     contentPane.add(addUserButton);
 
     addGroupButton = new JButton("Add Group");
-    addGroupButton.addActionListener(handler);
+    addGroupButton.addActionListener(handle);
     addGroupButton.setBounds(450, 108, 120, 63);
     contentPane.add(addGroupButton);
 
     openUserViewButton = new JButton("Open User View");
-    openUserViewButton.addActionListener(handler);
+    openUserViewButton.addActionListener(handle);
     openUserViewButton.setBounds(262, 190, 310, 40);
     contentPane.add(openUserViewButton);
 
-    TotalUsersButton = new JButton("User Total");
-    TotalUsersButton.addActionListener(handler);
+    TotalUsersButton = new JButton("Total Users");
+    TotalUsersButton.addActionListener(handle);
     TotalUsersButton.setBounds(265, 320, 140, 40);
     contentPane.add(TotalUsersButton);
     
     PositiveWordsButton = new JButton("Positive   %");
-    PositiveWordsButton.addActionListener(handler);
+    PositiveWordsButton.addActionListener(handle);
     PositiveWordsButton.setBounds(432, 320, 140, 40);
     contentPane.add(PositiveWordsButton);
 
-    TotalMessagesButton = new JButton("Messages Total");
-    TotalMessagesButton.addActionListener(handler);
+    TotalMessagesButton = new JButton("Total Tweets");
+    TotalMessagesButton.addActionListener(handle);
     TotalMessagesButton.setBounds(265, 381, 140, 40);
     contentPane.add(TotalMessagesButton);
 
-    TotalGroupsButton = new JButton("Group Total");
-    TotalGroupsButton.addActionListener(handler);
+    TotalGroupsButton = new JButton("Total Groups");
+    TotalGroupsButton.addActionListener(handle);
     TotalGroupsButton.setBounds(432, 381, 140, 40);
     contentPane.add(TotalGroupsButton);
 
@@ -142,17 +139,7 @@ public class UIWindow extends JFrame implements UIPanel {
       }
     });
   }
-
-  @Override
-  public void openUserView(User user) {
-    User node = getSelectedNode(this.tree);
-    if (!(node instanceof SingleUser)) {
-      popUp.infoBox("No user view for groups.", "[Error]");
-    } else {
-      new SingleUserWindow((SingleUser) node, treeDataHandler);
-    }
-  }
-
+  
   public User getSelectedNode(JTree tree) {
     TreePath parentPath = tree.getSelectionPath();
     User selectedNode;
@@ -162,6 +149,16 @@ public class UIWindow extends JFrame implements UIPanel {
       selectedNode = (User)(parentPath.getLastPathComponent());
     }
     return selectedNode;
+  }
+
+  @Override
+  public void openUserView(User user) {
+    User node = getSelectedNode(this.tree);
+    if (!(node instanceof SingleUser)) {
+      popUp.infoBox("No user view for groups.", "[Error]");
+    } else {
+      new SingleUserWindow((SingleUser) node, treeDataHandler);
+    }
   }
 
   private class Handler implements ActionListener {
@@ -178,12 +175,11 @@ public class UIWindow extends JFrame implements UIPanel {
           return;
         }
         if(!newUser.validateID(userId)) {
-          popUp.infoBox("Invalid characters in ID.", "[Error]");
+          popUp.infoBox("ID contains invalid characters.", "[Error]");
           return;
         }
         if (treeDataHandler.addNode(selectedNode, newUser)) {
           tree.scrollPathToVisible(new TreePath(newUser.getPath()));
-          Date date = new Date(creation);
         } else {
           return;
         }
@@ -197,12 +193,11 @@ public class UIWindow extends JFrame implements UIPanel {
           return;
         }
         if (!newUserGroup.validateID(groupId)) {
-          popUp.infoBox("Invalid characters in ID.", "[Error]");
+          popUp.infoBox("ID contains invalid characters.", "[Error]");
           return;
         }
         if (treeDataHandler.addNode(selectedNode, newUserGroup)) {
           tree.scrollPathToVisible(new TreePath(newUserGroup.getPath()));
-          Date date = new Date(creation);
         } else {
           return;
         }
@@ -222,15 +217,14 @@ public class UIWindow extends JFrame implements UIPanel {
           TotalGroups totalGroups = new TotalGroups();
           treeDataHandler.accept(totalGroups);
           popUp.infoBox("There are " + totalGroups.result() + " groups.", "Total Groups");
-
         }
         if (e.getSource() == TotalMessagesButton) {
-          TotalMessages totalMessages = new TotalMessages();
+          TotalTweets totalMessages = new TotalTweets();
           treeDataHandler.accept(totalMessages);
           popUp.infoBox("There are " + totalMessages.result() + " messages.", "Total Messages");
         }
         if (e.getSource() == PositiveWordsButton) {
-          PositiveWords positivePercentage = new PositiveWords("good nice awesome great amazing");
+          PositiveWords positivePercentage = new PositiveWords("nice good great amazing awesome daebak lit");
           treeDataHandler.accept(positivePercentage);
           popUp.infoBox(String.format("%.02f", positivePercentage.result()) + "% of messages that are positive.",
               "Positive Percentage of Messages");

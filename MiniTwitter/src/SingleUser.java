@@ -5,32 +5,25 @@ import java.util.Date;
 public class SingleUser extends User implements Observer, Subject {
 
   private String id;
-  private long creationTime;
+  private DefaultListModel<String> newsFeed;
   private DefaultListModel<Observer> followers = new DefaultListModel<>();
   private DefaultListModel<Subject> following = new DefaultListModel<>();
-  private DefaultListModel<String> newsFeed;
-  private String message;
+  private String tweet;
   private boolean changeState = false;
-  private long lastUpdateTime;
-  private SimpleDateFormat sdf;
 
   public SingleUser(String id, long creationTime) {
     setID(id);
     this.allowsChildren = false;
     this.newsFeed = new DefaultListModel<>();
-    sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
   }
 
-  public void tweet(String message) {
-    this.message = message;
-    newsFeed.addElement("[" + this.getID() + "]: " + message);
-    this.changeState = true;
-    Date date = new Date(lastUpdateTime);
-    System.out.println("User " + this.id + " updated at: " + sdf.format(date));
+  public void tweet(String tweet) {
+    this.tweet = tweet;
+    newsFeed.addElement("[" + this.getID() + "]: " + tweet);
     notifyObservers();
   }
 
-  public Object[] getMessages() {
+  public Object[] getTweets() {
     return this.newsFeed.toArray();
   }
 
@@ -38,7 +31,7 @@ public class SingleUser extends User implements Observer, Subject {
     return this.followers.toArray();
   }
 
-  public DefaultListModel<String> getNewsFeedListModel() {
+  public DefaultListModel<String> getNewsFeed() {
     return newsFeed;
   }
 
@@ -46,7 +39,7 @@ public class SingleUser extends User implements Observer, Subject {
     return this.following.toArray();
   }
 
-  public DefaultListModel<Subject> getFollowingListModel() {
+  public DefaultListModel<Subject> getFollowingList() {
     return following;
   }
 
@@ -59,8 +52,6 @@ public class SingleUser extends User implements Observer, Subject {
   public void update(Subject s) {
     String update = s.getUpdate(this);
     this.newsFeed.addElement("[" + s.toString() + "]: " + update);
-    Date date = new Date(lastUpdateTime);
-    System.out.println("User " + this.id + " updated at: " + sdf.format(date));
   }
 
   @Override
@@ -88,7 +79,7 @@ public class SingleUser extends User implements Observer, Subject {
 
   @Override
   public String getUpdate(Observer o) {
-    return this.message;
+    return this.tweet;
   }
 
   @Override
@@ -104,7 +95,7 @@ public class SingleUser extends User implements Observer, Subject {
   @Override
   public boolean validateID(String id) {
     if(id.contains(" ")) {
-      System.out.println("User " + id + " contains spaces!");
+      System.out.println("User " + id + " has spaces!");
       return false;
     }
     return true;

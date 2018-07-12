@@ -1,6 +1,6 @@
 public interface Observer {
 
-  void update(Subject s);
+  void update(Subject subject);
 
-  void setSubject(Subject s);
+  void setSubject(Subject subject);
 }
