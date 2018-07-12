@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class SingleUserWindow extends JFrame implements SinglePanel {
 
   private SingleUser currentViewedUser;
-  private TreeDataHandler treeDataHandler;
+  private TreeDataManager treeDataHandler;
   private Alert popUpBox = new Alert();
 
   private JTextArea textUserId;
@@ -26,7 +26,7 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
   private JPanel border3;
   private JPanel border4;
 
-  public SingleUserWindow(SingleUser individualUser, TreeDataHandler treeDataHandler) {
+  public SingleUserWindow(SingleUser individualUser, TreeDataManager treeDataHandler) {
     this.currentViewedUser = individualUser;
     this.treeDataHandler = treeDataHandler;
     this.modelFollowing = currentViewedUser.getFollowingList();

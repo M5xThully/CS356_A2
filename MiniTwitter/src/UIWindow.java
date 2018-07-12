@@ -25,7 +25,7 @@ public class UIWindow extends JFrame implements UIPanel {
   private JPanel panel2;
   private JPanel panel3;
   private JTree tree;
-  private TreeDataHandler treeDataHandler;
+  private TreeDataManager treeDataHandler;
   private Alert popUp = new Alert();
 
   private UIWindow() {
@@ -42,7 +42,7 @@ public class UIWindow extends JFrame implements UIPanel {
     panel1.setBounds(0, 11, 251, 426);
     contentPane.add(panel1);
     panel1.setLayout(null);
-    treeDataHandler = new TreeDataHandler(new HashMap<>());
+    treeDataHandler = new TreeDataManager(new HashMap<>());
     tree = new JTree(treeDataHandler.getModel());
     tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     tree.setBounds(0, 0, 235, 400);
