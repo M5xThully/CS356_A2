@@ -5,7 +5,7 @@ public class TreeDataHandler implements Visitable, TreeDataStructure {
 
   private Map<String,User> map;
   private DefaultTreeModel tree;
-  private PopUp popUp=new PopUp();
+  private AlertBox popUp=new AlertBox();
 
   public TreeDataHandler(Map<String, User> map) {
     long creation = System.currentTimeMillis();

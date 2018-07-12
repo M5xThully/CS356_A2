@@ -9,7 +9,7 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
 
   private SingleUser currentViewedUser;
   private TreeDataHandler treeDataHandler;
-  private PopUp popUp = new PopUp();
+  private AlertBox popUp = new AlertBox();
 
   private JTextArea textUserId;
   private JTextArea textTweetMessage;
@@ -127,7 +127,7 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
   @Override
   public void follow(SingleUser user) {
     currentViewedUser.follow(user);
-    popUp.infoBox("You are now following " + user.getID() + ".", "User Found");
+    popUp.infoBox("You are now following " + user.getID() + ".", "[User Found]");
   }
 
   @Override
@@ -139,7 +139,6 @@ public class SingleUserWindow extends JFrame implements SinglePanel {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      //source of action is follow button
       if (e.getSource() == followButton) {
         String userId = textUserId.getText().trim();
         User node;

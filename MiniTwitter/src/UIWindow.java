@@ -25,7 +25,7 @@ public class UIWindow extends JFrame implements UIPanel {
   private JTextArea txtrUserGroupId;
   private JTree tree;
   private TreeDataHandler treeDataHandler;
-  private PopUp popUp = new PopUp();
+  private AlertBox popUp = new AlertBox();
   private JPanel panel1;
   private JPanel panel2;
   private JPanel panel3;
@@ -148,7 +148,7 @@ public class UIWindow extends JFrame implements UIPanel {
   public void openUserView(User user) {
     User node = getSelectedNode(this.tree);
     if (!(node instanceof SingleUser)) {
-      popUp.infoBox("No user view for groups.", "ERROR");
+      popUp.infoBox("No user view for groups.", "[Error]");
     } else {
       new SingleUserWindow((SingleUser) node, treeDataHandler);
     }
@@ -179,7 +179,7 @@ public class UIWindow extends JFrame implements UIPanel {
           return;
         }
         if(!newUser.validateID(userId)) {
-          popUp.infoBox("Invalid characters in ID.", "ERROR");
+          popUp.infoBox("Invalid characters in ID.", "[Error]");
           return;
         }
         if (treeDataHandler.addNode(selectedNode, newUser)) {
@@ -198,7 +198,7 @@ public class UIWindow extends JFrame implements UIPanel {
           return;
         }
         if (!newUserGroup.validateID(groupId)) {
-          popUp.infoBox("Invalid characters in ID.", "ERROR");
+          popUp.infoBox("Invalid characters in ID.", "[Error]");
           return;
         }
         if (treeDataHandler.addNode(selectedNode, newUserGroup)) {
