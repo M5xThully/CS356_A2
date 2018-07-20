@@ -33,7 +33,6 @@ public class UIWindow extends JFrame implements UIPanel {
   private JButton lastUpdatedUserButton;
 
   private UIWindow() {
-    sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
     setTitle("Mini Twitter UI");
     setBounds(100, 100, 600, 477);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -106,11 +105,13 @@ public class UIWindow extends JFrame implements UIPanel {
     validIdButton.addActionListener(handle);
     validIdButton.setBounds(265, 385, 140, 40);
     contentPane.add(validIdButton);
+    validIdButton.setForeground(Color.BLACK);
     
     lastUpdatedUserButton = new JButton("Last Updated User");
     lastUpdatedUserButton.addActionListener(handle);
     lastUpdatedUserButton.setBounds(432, 385, 140, 40);
     contentPane.add(lastUpdatedUserButton);
+    lastUpdatedUserButton.setForeground(Color.BLACK);
 
     panel3 = new JPanel();
     panel3.setBorder(new TitledBorder(UIManager.getBorder("List.focusCellHighlightBorder"), "User ID", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 225, 0)));
@@ -151,13 +152,13 @@ public class UIWindow extends JFrame implements UIPanel {
 
       @Override
       public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean isLeaf, int row, boolean focused) {
-        Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, isLeaf, row, focused);
+        Component comp = super.getTreeCellRendererComponent(tree, value, selected, expanded, isLeaf, row, focused);
         if (isLeaf) {
           setIcon(userIcon);
         } else {
           setIcon(groupIcon);
         }
-        return c;
+        return comp;
       }
     });
   }
@@ -185,10 +186,11 @@ public class UIWindow extends JFrame implements UIPanel {
 
   private class Handler implements ActionListener {
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent event) {
       User selectedNode = getSelectedNode(tree);
+      sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
 
-      if (e.getSource() == addUserButton) {
+      if (event.getSource() == addUserButton) {
         String userId = txtrUserId.getText().trim();
         long creation = System.currentTimeMillis();
         User newUser = new SingleUser(userId, creation);
@@ -202,12 +204,14 @@ public class UIWindow extends JFrame implements UIPanel {
         }
         if (treeDataHandler.addNode(selectedNode, newUser)) {
           tree.scrollPathToVisible(new TreePath(newUser.getPath()));
+          Date date = new Date(creation);
+          System.out.printf("Creation time for %s: %s\n", userId, sdf.format(date));
         } else {
           return;
         }
       }
 
-      if (e.getSource() == addGroupButton) {
+      if (event.getSource() == addGroupButton) {
         String groupId = txtrUserGroupId.getText().trim();
         long creation = System.currentTimeMillis();
         User newUserGroup = new GroupUser(groupId, creation);
@@ -227,34 +231,42 @@ public class UIWindow extends JFrame implements UIPanel {
         }
       }
 
-      if (e.getSource() == openUserViewButton) {
+      if (event.getSource() == openUserViewButton) {
         openUserView(selectedNode);
         if(selectedNode instanceof SingleUser) {
+            Date date = new Date(selectedNode.getCreationTime());
+            System.out.printf("Opened user view for %s, creation time of %s: %s\n", selectedNode.getID(), selectedNode.getID(), sdf.format(date));
         }
       } else {
-        if (e.getSource() == TotalUsersButton) {
+        if (event.getSource() == TotalUsersButton) {
           TotalUsers totalUsers = new TotalUsers();
           treeDataHandler.accept(totalUsers);
           popUp.alert("There are " + totalUsers.result() + " users.", "Total Users");
         }
-        if (e.getSource() == TotalGroupsButton) {
+        if (event.getSource() == TotalGroupsButton) {
           TotalGroups totalGroups = new TotalGroups();
           treeDataHandler.accept(totalGroups);
           popUp.alert("There are " + totalGroups.result() + " groups.", "Total Groups");
         }
-        if (e.getSource() == TotalTweetsButton) {
+        if (event.getSource() == TotalTweetsButton) {
           TotalTweets totalMessages = new TotalTweets();
           treeDataHandler.accept(totalMessages);
           popUp.alert("There are " + totalMessages.result() + " messages.", "Total Messages");
         }
-        if(e.getSource() == validIdButton) {
+        if(event.getSource() == validIdButton) {
           popUp.alert("All IDs valid.", "All ID's Valid?");
         }
-        if (e.getSource() == PositiveWordsButton) {
+        if (event.getSource() == PositiveWordsButton) {
           PositiveWords positivePercentage = new PositiveWords("nice good great amazing awesome daebak lit");
           treeDataHandler.accept(positivePercentage);
           popUp.alert(String.format("%.02f", positivePercentage.result()) + "% of messages that are positive.",
               "Positive Percentage of Messages");
+        }
+        
+        if(event.getSource() == lastUpdatedUserButton) {
+          LastUpdated lastUpdated = new LastUpdated();
+          treeDataHandler.accept(lastUpdated);
+          popUp.alert("Last Updated User: " + lastUpdated.getLastUpdatedUser(), "Last Updated User");
         }
       }
     }

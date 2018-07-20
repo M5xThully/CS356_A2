@@ -13,4 +13,8 @@ public abstract class User extends DefaultMutableTreeNode {
   public abstract long getCreationTime();
   
   public abstract boolean validateID(String id);
+  
+  public abstract void setLastUpdateTime(long lastUpdateTime);
+  
+  public abstract long getLastUpdateTime();
 }

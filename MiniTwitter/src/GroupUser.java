@@ -7,6 +7,10 @@ public class GroupUser extends User {
   public GroupUser(String id, long creationTime) {
     setID(id);
   }
+  
+  public long getLastUpdateTime() {
+    return updateTime;
+  }
 
   public void insert(User user, int childIndex) {
     super.insert(user, childIndex);
@@ -45,4 +49,10 @@ public class GroupUser extends User {
   public long getCreationTime() {
     return creationTime;
   }
+  
+  @Override
+  public void setLastUpdateTime(long lastUpdateTime) {
+    this.updateTime = lastUpdateTime;
+  }
+  
 }

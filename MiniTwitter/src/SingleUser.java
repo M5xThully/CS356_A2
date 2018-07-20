@@ -11,16 +11,24 @@ public class SingleUser extends User implements Observer, Subject {
   private String tweet;
   private boolean changeState = false;
   private long creationTime;
+  private long lastUpdateTime;
+  private SimpleDateFormat sdf;
 
   public SingleUser(String id, long creationTime) {
     setID(id);
     this.allowsChildren = false;
     this.newsFeed = new DefaultListModel<>();
+    sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+    setCreationTime(creationTime);
   }
 
   public void tweet(String tweet) {
     this.tweet = tweet;
+    setLastUpdateTime(System.currentTimeMillis());
     newsFeed.addElement("[" + this.getID() + "]: " + tweet);
+    this.changeState = true;
+    Date date = new Date(lastUpdateTime);
+    System.out.println("User " + this.id + " updated at: " + sdf.format(date));
     notifyObservers();
   }
 
@@ -52,7 +60,10 @@ public class SingleUser extends User implements Observer, Subject {
   @Override
   public void update(Subject s) {
     String update = s.getUpdate(this);
+    setLastUpdateTime(System.currentTimeMillis());
     this.newsFeed.addElement("[" + s.toString() + "]: " + update);
+    Date date = new Date(lastUpdateTime);
+    System.out.println("User " + this.id + " was updated at: " + sdf.format(date));
   }
 
   @Override
@@ -115,5 +126,13 @@ public class SingleUser extends User implements Observer, Subject {
   @Override
   public long getCreationTime() {
     return creationTime;
+  }
+  
+  public void setLastUpdateTime(long lastUpdateTime) {
+    this.lastUpdateTime = lastUpdateTime;
+  }
+
+  public long getLastUpdateTime() {
+    return lastUpdateTime;
   }
 }
