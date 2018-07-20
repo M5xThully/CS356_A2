@@ -6,7 +6,11 @@ public abstract class User extends DefaultMutableTreeNode {
 
   public abstract String getID();
 
-  public abstract boolean validateID(String id);
-
   public abstract String toString();
+  
+  public abstract void setCreationTime(long creationTime);
+
+  public abstract long getCreationTime();
+  
+  public abstract boolean validateID(String id);
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Component;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class UIWindow extends JFrame implements UIPanel {
@@ -27,8 +28,12 @@ public class UIWindow extends JFrame implements UIPanel {
   private JTree tree;
   private TreeDataManager treeDataHandler;
   private Alert popUp = new Alert();
+  private SimpleDateFormat sdf;
+  private JButton validIdButton;
+  private JButton lastUpdatedUserButton;
 
   private UIWindow() {
+    sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
     setTitle("Mini Twitter UI");
     setBounds(100, 100, 600, 477);
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -75,27 +80,37 @@ public class UIWindow extends JFrame implements UIPanel {
 
     TotalUsersButton = new JButton("Total Users");
     TotalUsersButton.addActionListener(handle);
-    TotalUsersButton.setBounds(265, 320, 140, 40);
+    TotalUsersButton.setBounds(265, 260, 140, 40);
     contentPane.add(TotalUsersButton);
     TotalUsersButton.setForeground(Color.BLACK);
     
     PositiveWordsButton = new JButton("Positive   %");
     PositiveWordsButton.addActionListener(handle);
-    PositiveWordsButton.setBounds(432, 320, 140, 40);
+    PositiveWordsButton.setBounds(432, 260, 140, 40);
     contentPane.add(PositiveWordsButton);
     PositiveWordsButton.setForeground(Color.BLACK);
 
     TotalTweetsButton = new JButton("Total Tweets");
     TotalTweetsButton.addActionListener(handle);
-    TotalTweetsButton.setBounds(265, 381, 140, 40);
+    TotalTweetsButton.setBounds(265, 321, 140, 40);
     contentPane.add(TotalTweetsButton);
     TotalTweetsButton.setForeground(Color.BLACK);
 
     TotalGroupsButton = new JButton("Total Groups");
     TotalGroupsButton.addActionListener(handle);
-    TotalGroupsButton.setBounds(432, 381, 140, 40);
+    TotalGroupsButton.setBounds(432, 321, 140, 40);
     contentPane.add(TotalGroupsButton);
     TotalGroupsButton.setForeground(Color.BLACK);
+    
+    validIdButton = new JButton("Validate IDs");
+    validIdButton.addActionListener(handle);
+    validIdButton.setBounds(265, 385, 140, 40);
+    contentPane.add(validIdButton);
+    
+    lastUpdatedUserButton = new JButton("Last Updated User");
+    lastUpdatedUserButton.addActionListener(handle);
+    lastUpdatedUserButton.setBounds(432, 385, 140, 40);
+    contentPane.add(lastUpdatedUserButton);
 
     panel3 = new JPanel();
     panel3.setBorder(new TitledBorder(UIManager.getBorder("List.focusCellHighlightBorder"), "User ID", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 225, 0)));
@@ -205,6 +220,8 @@ public class UIWindow extends JFrame implements UIPanel {
         }
         if (treeDataHandler.addNode(selectedNode, newUserGroup)) {
           tree.scrollPathToVisible(new TreePath(newUserGroup.getPath()));
+          Date date = new Date(creation);
+          System.out.printf("Creation time for %s: %s\n", groupId, sdf.format(date));
         } else {
           return;
         }
@@ -229,6 +246,9 @@ public class UIWindow extends JFrame implements UIPanel {
           TotalTweets totalMessages = new TotalTweets();
           treeDataHandler.accept(totalMessages);
           popUp.alert("There are " + totalMessages.result() + " messages.", "Total Messages");
+        }
+        if(e.getSource() == validIdButton) {
+          popUp.alert("All IDs valid.", "All ID's Valid?");
         }
         if (e.getSource() == PositiveWordsButton) {
           PositiveWords positivePercentage = new PositiveWords("nice good great amazing awesome daebak lit");

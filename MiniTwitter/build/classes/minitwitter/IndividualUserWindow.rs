@@ -1,2 +1,0 @@
-IndividualUserWindow$Handler
-IndividualUserWindow

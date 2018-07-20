@@ -10,6 +10,7 @@ public class SingleUser extends User implements Observer, Subject {
   private DefaultListModel<Subject> following = new DefaultListModel<>();
   private String tweet;
   private boolean changeState = false;
+  private long creationTime;
 
   public SingleUser(String id, long creationTime) {
     setID(id);
@@ -104,5 +105,15 @@ public class SingleUser extends User implements Observer, Subject {
   @Override
   public String toString() {
     return this.getID();
+  }
+  
+  @Override
+  public void setCreationTime(long creationTime) {
+    this.creationTime = creationTime;
+  }
+
+  @Override
+  public long getCreationTime() {
+    return creationTime;
   }
 }
